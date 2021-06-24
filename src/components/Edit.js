@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { IconButton, FormControl, InputLabel, Select } from "@material-ui/core";
+import InfoIcon from "@material-ui/icons/Info";
+
 import {
   Modal,
   Typography,
@@ -42,12 +45,22 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  option: {
+    width: "100%",
+    cursor: "pointer",
+  },
+
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));
 
-const initialState = { name: "", prix: "", url: "", category: "" };
-export default function ({ cardAction }) {
+// const initialState = { name: "", prix: "", url: "" };
+export default function ({ product }) {
+  console.log("product edit", product);
   const classes = useStyles();
-  const [input, setInput] = useState(initialState);
+  const [input, setInput] = useState(product);
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
@@ -61,21 +74,24 @@ export default function ({ cardAction }) {
   };
 
   const handleChange = (e) => {
+    console.log("input from edit", input);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
   const handleAdd = (e) => {
     e.preventDefault();
-    db.collection("Products").add(input);
-    setInput(initialState);
+    db.collection("Products")
+      .doc(product.id)
+      .set({ ...input }, { merge: true });
     setTimeout(() => {
       setOpen(false);
     }, 1000);
+    // setInput(product);
   };
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
-        Add Product
-      </button>
+      <IconButton onClick={handleOpen}>
+        <InfoIcon />
+      </IconButton>
       <Modal open={open} onClose={handleClose}>
         <div>
           <form
@@ -87,7 +103,7 @@ export default function ({ cardAction }) {
               X
             </span>
             <Typography variant="h4" align="center">
-              Add Product
+              Edit Product
             </Typography>
             <br />
             <TextField
@@ -97,7 +113,8 @@ export default function ({ cardAction }) {
               type="text"
               label="Nom Product"
               onChange={handleChange}
-            />
+            />{" "}
+            <br />
             <TextField
               required
               value={input.url}
@@ -105,7 +122,8 @@ export default function ({ cardAction }) {
               type="url"
               label="URL"
               onChange={handleChange}
-            />
+            />{" "}
+            <br />
             <TextField
               required
               value={input.prix}
@@ -113,15 +131,42 @@ export default function ({ cardAction }) {
               type="number"
               label="Prix"
               onChange={handleChange}
-            />
-            <TextField
-              required
-              value={input.category}
-              name="category"
-              type="category"
-              label="category"
-              onChange={handleChange}
-            />
+            />{" "}
+            <br />
+            <FormControl className={classes.formControl}>
+              <InputLabel>category</InputLabel>
+              <Select
+                required
+                value={input.category}
+                name="category"
+                type="category"
+                label="category"
+                onChange={handleChange}
+              >
+                <option className={classes.option} aria-label="None" value="" />
+                <option className={classes.option} value="IT">
+                  IT
+                </option>
+                <option className={classes.option} value="Immovable">
+                  Immovable
+                </option>
+                <option className={classes.option} value="Vehicle">
+                  Vehicle
+                </option>
+                <option className={classes.option} value="Clothing">
+                  Clothing
+                </option>
+                <option className={classes.option} value="Food">
+                  Food
+                </option>
+                <option className={classes.option} value="Leisure">
+                  Leisure
+                </option>
+                <option className={classes.option} value="Home">
+                  Home
+                </option>
+              </Select>
+            </FormControl>
             <Divider />
             <Button
               size="small"
