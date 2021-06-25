@@ -8,9 +8,12 @@ import DriveEtaIcon from "@material-ui/icons/DriveEta";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import PhonelinkIcon from "@material-ui/icons/Phonelink";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
+import Badge from "@material-ui/core/Badge";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 // import styles from "./all.module.css";
 import EcoIcon from "@material-ui/icons/Eco";
 import AccessibilityIcon from "@material-ui/icons/Accessibility";
+import { db } from "../../firebase/config";
 
 const useStyle = makeStyles((theme) => ({
   filter: {
@@ -34,6 +37,7 @@ const useStyle = makeStyles((theme) => ({
 const AllProducts = ({ setFilter }) => {
   const classes = useStyle();
   const [click, setClick] = useState("All");
+  const [fav, setFav] = useState(0);
   const defaultIt = (name) => {
     if (name === click) return "default";
     return "outlined";
@@ -41,8 +45,38 @@ const AllProducts = ({ setFilter }) => {
   useEffect(() => {
     setFilter(click);
   }, [click]);
+  React.useEffect(() => {
+    const unsub = db.collection("Products").onSnapshot((snap) => {
+      let products = snap.docs.map((doc) => ({
+        fav: doc.data().fav,
+      }));
+      setFav(products.filter((el) => el.fav).length);
+    });
+
+    return unsub;
+  }, []);
+  console.log(fav);
   return (
     <div className={classes.filter}>
+      <Chip
+        className={classes.chip}
+        onClick={() => setClick("Fav")}
+        icon={
+          <Badge
+            badgeContent={fav}
+            // variant="dot"
+            color="secondary"
+            invisible={false}
+          >
+            <FavoriteIcon style={{ color: "#922" }} />
+          </Badge>
+        }
+        label="Favorite"
+        name="Fav"
+        clickable
+        color="primary"
+        variant={defaultIt("Fav")}
+      />
       <Chip
         className={classes.chip}
         onClick={() => setClick("All")}

@@ -51,12 +51,52 @@ const AllCard = ({ filter }) => {
         url: doc.data().url,
         prix: doc.data().prix,
         category: doc.data().category,
+        fav: doc.data().fav,
       }));
       setTab(products);
     });
 
     return unsub;
   }, []);
+  console.log(filter);
+  const filterProduct = (filter) => {
+    switch (filter) {
+      case "Fav":
+        return (
+          <>
+            {tab
+              .filter((product) => product.fav)
+              .map((product) => (
+                <Grid item md={3} sm={4} xs={6}>
+                  <Card product={product} />
+                </Grid>
+              ))}
+          </>
+        );
+      case "All":
+        return (
+          <>
+            {tab.map((product) => (
+              <Grid item md={3} sm={4} xs={6}>
+                <Card product={product} />
+              </Grid>
+            ))}
+          </>
+        );
+      default:
+        return (
+          <>
+            {tab
+              .filter((product) => product.category == filter)
+              .map((product) => (
+                <Grid item md={3} sm={4} xs={6}>
+                  <Card product={product} />
+                </Grid>
+              ))}
+          </>
+        );
+    }
+  };
   return (
     <Grid container align="center" spacing={1} classNme={classes.root}>
       {user && (
@@ -66,7 +106,7 @@ const AllCard = ({ filter }) => {
           </div>
         </Grid>
       )}
-      {filter != "All" ? (
+      {/* {filter != "All" ? (
         <>
           {tab
             .filter((product) => product.category == filter)
@@ -84,7 +124,9 @@ const AllCard = ({ filter }) => {
             </Grid>
           ))}
         </>
-      )}
+      )} */}
+      {filterProduct(filter)}
+
       <CssBaseline />
     </Grid>
   );

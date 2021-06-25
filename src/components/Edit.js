@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton, FormControl, InputLabel, Select } from "@material-ui/core";
+import {
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  Switch,
+} from "@material-ui/core";
 import InfoIcon from "@material-ui/icons/Info";
 
 import {
@@ -57,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // const initialState = { name: "", prix: "", url: "" };
-export default function ({ product }) {
+export default function ({ product, setCheckedA, checkedA }) {
   console.log("product edit", product);
   const classes = useStyles();
   const [input, setInput] = useState(product);
@@ -81,7 +87,7 @@ export default function ({ product }) {
     e.preventDefault();
     db.collection("Products")
       .doc(product.id)
-      .set({ ...input }, { merge: true });
+      .set({ ...input, fav: checkedA }, { merge: true });
     setTimeout(() => {
       setOpen(false);
     }, 1000);
@@ -167,6 +173,11 @@ export default function ({ product }) {
                 </option>
               </Select>
             </FormControl>
+            <Switch
+              checked={checkedA}
+              onChange={() => setCheckedA(!checkedA)}
+              name="checkedA"
+            />
             <Divider />
             <Button
               size="small"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Edit from "../Edit";
 
@@ -23,6 +23,7 @@ import cardAction from "../Amzone";
 // import InfoProduct from '../InfoProduct';
 import InfoProduct from "../InfoProduct";
 import { useAuth } from "../../auth/useAuth";
+import { db } from "../../firebase/config";
 const useStyle = makeStyles((theme) => ({
   card: {
     border: "1px solid #009",
@@ -51,6 +52,19 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 export default function CardText({ product }) {
+  const [checkedA, setCheckedA] = useState(product.fav);
+  const handleAdd = () => {
+    db.collection("Products")
+      .doc(product.id)
+      .set({ fav: checkedA }, { merge: true });
+    setTimeout(() => {
+      setOpen(false);
+    }, 1000);
+    // setInput(product);
+  };
+  React.useEffect(() => {
+    handleAdd();
+  }, [checkedA]);
   const { user } = useAuth();
   console.log("product", product);
   const [open, setOpen] = React.useState(false);
@@ -73,10 +87,19 @@ export default function CardText({ product }) {
               alignItems: "center",
             }}
           >
-            <IconButton style={{ padding: 10, color: "#e22" }}>
+            <IconButton
+              style={{ padding: 10, color: product.fav ? "#e22" : "#000" }}
+              onClick={() => setCheckedA(!checkedA)}
+            >
               <FavoriteIcon />
             </IconButton>
-            {user && <Edit product={product} />}
+            {user && (
+              <Edit
+                product={product}
+                setCheckedA={setCheckedA}
+                checkedA={checkedA}
+              />
+            )}
           </span>
         }
         title={
@@ -102,7 +125,6 @@ export default function CardText({ product }) {
       </CardContent>
       <CardActions className={classes.cardaction}>
         <InfoProduct product={product} open={open} setOpen={setOpen} />
-        {/* {cardAction()} */}
       </CardActions>
     </Card>
   );
