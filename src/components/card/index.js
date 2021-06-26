@@ -40,7 +40,6 @@ const useStyle = makeStyles((theme) => ({
 }));
 const AllCard = ({ filter }) => {
   const { user } = useAuth();
-  console.log("user", user);
   const classes = useStyle();
   const [tab, setTab] = useState([]);
   React.useEffect(() => {
@@ -58,7 +57,6 @@ const AllCard = ({ filter }) => {
 
     return unsub;
   }, []);
-  console.log(filter);
   const filterProduct = (filter) => {
     switch (filter) {
       case "Fav":

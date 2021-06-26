@@ -66,7 +66,6 @@ export default function CardText({ product }) {
     handleAdd();
   }, [checkedA]);
   const { user } = useAuth();
-  console.log("product", product);
   const [open, setOpen] = React.useState(false);
   const classes = useStyle();
   const [expanded, setExpanded] = React.useState(false);
@@ -74,7 +73,6 @@ export default function CardText({ product }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  console.log("pro", product);
   return (
     <Card className={classes.card} elevation={5}>
       <CardHeader

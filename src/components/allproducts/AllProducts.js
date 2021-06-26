@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Chip, makeStyles } from "@material-ui/core";
-import FaceIcon from "@material-ui/icons/Face";
-import DoneIcon from "@material-ui/icons/Done";
 import AllInclusiveIcon from "@material-ui/icons/AllInclusive";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
 import DriveEtaIcon from "@material-ui/icons/DriveEta";
@@ -26,6 +24,10 @@ const useStyle = makeStyles((theme) => ({
       flexWrap: "wrap",
       justifyContent: "center",
     },
+    position: "sticky",
+    top: 10,
+    zIndex: 100,
+    background: "#fff",
   },
   chip: {
     margin: "5px",
@@ -55,7 +57,6 @@ const AllProducts = ({ setFilter }) => {
 
     return unsub;
   }, []);
-  console.log(fav);
   return (
     <div className={classes.filter}>
       <Chip

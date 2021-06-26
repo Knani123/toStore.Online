@@ -64,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 
 // const initialState = { name: "", prix: "", url: "" };
 export default function ({ product, setCheckedA, checkedA }) {
-  console.log("product edit", product);
   const classes = useStyles();
   const [input, setInput] = useState(product);
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -80,7 +79,6 @@ export default function ({ product, setCheckedA, checkedA }) {
   };
 
   const handleChange = (e) => {
-    console.log("input from edit", input);
     setInput({ ...input, [e.target.name]: e.target.value });
   };
   const handleAdd = (e) => {
@@ -92,6 +90,15 @@ export default function ({ product, setCheckedA, checkedA }) {
       setOpen(false);
     }, 1000);
     // setInput(product);
+  };
+  const deleteIt = (e) => {
+    if (window.confirm(`Êtes-vous sûr de supprimer " ${product.name} "?`)) {
+      e.preventDefault();
+      db.collection("Products").doc(product.id).delete();
+      setTimeout(() => {
+        setOpen(false);
+      }, 500);
+    }
   };
   return (
     <div>
@@ -186,6 +193,16 @@ export default function ({ product, setCheckedA, checkedA }) {
               type="submit"
             >
               Add
+            </Button>
+            <Button
+              size="small"
+              color="secondary"
+              variant="outlined"
+              type="submit"
+              style={{ float: "right" }}
+              onClick={deleteIt}
+            >
+              Delete
             </Button>
           </form>
         </div>

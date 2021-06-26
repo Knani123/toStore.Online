@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
 import {
   Modal,
   Typography,
@@ -73,9 +74,13 @@ export default function ({ cardAction }) {
   };
   return (
     <div>
-      <button type="button" onClick={handleOpen}>
+      <Button
+        startIcon={<AddToPhotosIcon />}
+        type="button"
+        onClick={handleOpen}
+      >
         Add Product
-      </button>
+      </Button>
       <Modal open={open} onClose={handleClose}>
         <div>
           <form

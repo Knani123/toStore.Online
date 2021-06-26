@@ -1,7 +1,6 @@
-import AddProduct from "./InfoProduct";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Modal, Typography, IconButton, Button } from "@material-ui/core";
+import { Modal, Typography, Button } from "@material-ui/core";
 import Avatars from "./Amzone";
 
 function getModalStyle() {
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function InfoProduct({ open, setOpen, product }) {
-  console.log("productfrom info", product);
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
